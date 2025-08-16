@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "cd resources/frontend && npm run dev",
+        "build": "cd resources/frontend && npm run build",
+        "frontend:install": "cd resources/frontend && npm install",
+        "start": "./start.sh"
+    },
+    "dependencies": {
+        "@types/leaflet": "^1.9.19",
+        "chart.js": "^4.5.0",
+        "leaflet": "^1.9.4",
+        "mapbox-gl": "^3.13.0",
+        "shadcn-vue": "^2.2.0"
+    },
+    "devDependencies": {
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^1.2.0"
+    }
+}

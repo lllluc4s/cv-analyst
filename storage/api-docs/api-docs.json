@@ -1,0 +1,1004 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "CV Analyst API",
+        "description": "\n * **CV Analyst API** - Solução completa para análise de CVs e gestão de oportunidades de emprego\n * \n * ## 🚀 Funcionalidades Principais:\n * - **Análise Automática de CVs**: Utilize IA para analisar e pontuar currículos\n * - **Gestão de Oportunidades**: Publique e gira vagas de emprego\n * - **Sistema Kanban**: Gestão visual do processo de recrutamento\n * - **API Pública**: Endpoints públicos para listagem de vagas\n * - **Relatórios**: Estatísticas e relatórios detalhados\n * \n * ## 🔐 Autenticação:\n * A API utiliza Laravel Sanctum com tokens Bearer. Primeiro registe-se ou faça login para obter um token, depois inclua-o no header: `Authorization: Bearer {seu-token}`\n * \n * ## 📝 Exemplos:\n * - Para testar endpoints protegidos, clique em 'Authorize' e insira seu token\n * - Endpoints públicos não requerem autenticação\n * - Todos os uploads de arquivos devem ser PDFs (máximo 5MB)\n * \n * ## 🌐 Ambientes:\n * - **Desenvolvimento**: {APP_URL}/api\n * - **Produção**: {PRODUCTION_API_URL}/api\n * \n * As URLs são configuradas dinamicamente através das variáveis de ambiente.\n * ",
+        "contact": {
+            "name": "Suporte CV Analyst",
+            "url": "{PRODUCTION_FRONTEND_URL}",
+            "email": "lucas.rodrigues@team.inovcorp.com"
+        },
+        "license": {
+            "name": "Proprietary",
+            "url": "{PRODUCTION_FRONTEND_URL}/license"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8001/api",
+            "description": "🔧 Servidor de Desenvolvimento"
+        },
+        {
+            "url": "https://lucas-cv.iwork.pt/api",
+            "description": "🌐 Servidor de Produção"
+        }
+    ],
+    "paths": {
+        "/oportunidades": {
+            "get": {
+                "tags": [
+                    "💼 Oportunidades"
+                ],
+                "summary": "Listar oportunidades da empresa",
+                "description": "Retorna todas as oportunidades da empresa autenticada",
+                "operationId": "d19890c7e87b9ca41ddd02c081c9223a",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de oportunidades",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "titulo": {
+                                                        "type": "string",
+                                                        "example": "Desenvolvedor Full Stack"
+                                                    },
+                                                    "descricao": {
+                                                        "type": "string",
+                                                        "example": "Procuramos um desenvolvedor experiente..."
+                                                    },
+                                                    "localizacao": {
+                                                        "type": "string",
+                                                        "example": "Lisboa"
+                                                    },
+                                                    "salario_min": {
+                                                        "type": "integer",
+                                                        "example": 30000
+                                                    },
+                                                    "salario_max": {
+                                                        "type": "integer",
+                                                        "example": 45000
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 50
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário não autenticado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "💼 Oportunidades"
+                ],
+                "summary": "Criar nova oportunidade",
+                "description": "Cria uma nova oportunidade de emprego para a empresa autenticada",
+                "operationId": "48ac829643062bacc486d169befc91f6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "titulo",
+                                    "descricao",
+                                    "localizacao"
+                                ],
+                                "properties": {
+                                    "titulo": {
+                                        "type": "string",
+                                        "example": "Desenvolvedor Full Stack"
+                                    },
+                                    "descricao": {
+                                        "type": "string",
+                                        "example": "Procuramos um desenvolvedor experiente em React e Laravel..."
+                                    },
+                                    "localizacao": {
+                                        "type": "string",
+                                        "example": "Lisboa"
+                                    },
+                                    "tipo_contrato": {
+                                        "type": "string",
+                                        "enum": [
+                                            "full-time",
+                                            "part-time",
+                                            "freelance",
+                                            "estágio"
+                                        ],
+                                        "example": "full-time"
+                                    },
+                                    "salario_min": {
+                                        "type": "integer",
+                                        "example": 30000
+                                    },
+                                    "salario_max": {
+                                        "type": "integer",
+                                        "example": 45000
+                                    },
+                                    "remoto": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "skills": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "React",
+                                            "Laravel",
+                                            "JavaScript",
+                                            "PHP"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Oportunidade criada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Oportunidade criada com sucesso"
+                                        },
+                                        "oportunidade": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "titulo": {
+                                                    "type": "string",
+                                                    "example": "Desenvolvedor Full Stack"
+                                                },
+                                                "slug": {
+                                                    "type": "string",
+                                                    "example": "desenvolvedor-full-stack-1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/public/empresa/{slug}": {
+            "get": {
+                "tags": [
+                    "🌐 Público"
+                ],
+                "summary": "Visualizar página de empresa",
+                "description": "Retorna informações da empresa e suas oportunidades públicas",
+                "operationId": "677be344b1bdfa235be92b2850b00855",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug da empresa",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "tech-solutions"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informações da empresa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "company": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Tech Solutions"
+                                                },
+                                                "website": {
+                                                    "type": "string",
+                                                    "example": "https://techsolutions.pt"
+                                                },
+                                                "sector": {
+                                                    "type": "string",
+                                                    "example": "Tecnologia"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "oportunidades": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "titulo": {
+                                                        "type": "string",
+                                                        "example": "Desenvolvedor Full Stack"
+                                                    },
+                                                    "descricao": {
+                                                        "type": "string",
+                                                        "example": "Procuramos um desenvolvedor..."
+                                                    },
+                                                    "skills_desejadas": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Empresa não encontrada"
+                    }
+                }
+            }
+        },
+        "/public/oportunidades": {
+            "get": {
+                "tags": [
+                    "🌐 Público"
+                ],
+                "summary": "Listar todas as oportunidades públicas",
+                "description": "Retorna uma lista paginada de todas as oportunidades públicas e ativas de todas as empresas",
+                "operationId": "92aa72ea215a0800d186eff9a959071d",
+                "parameters": [
+                    {
+                        "name": "skills",
+                        "in": "query",
+                        "description": "Filtrar por competências (separadas por vírgula)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "React,JavaScript,PHP"
+                        }
+                    },
+                    {
+                        "name": "company_id",
+                        "in": "query",
+                        "description": "Filtrar por ID da empresa",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "Filtrar por localização",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Lisboa"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de oportunidades",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "titulo": {
+                                                        "type": "string",
+                                                        "example": "Desenvolvedor Full Stack"
+                                                    },
+                                                    "slug": {
+                                                        "type": "string",
+                                                        "example": "desenvolvedor-full-stack-1"
+                                                    },
+                                                    "descricao": {
+                                                        "type": "string",
+                                                        "example": "Procuramos um desenvolvedor..."
+                                                    },
+                                                    "localizacao": {
+                                                        "type": "string",
+                                                        "example": "Lisboa"
+                                                    },
+                                                    "tipo_contrato": {
+                                                        "type": "string",
+                                                        "example": "full-time"
+                                                    },
+                                                    "remoto": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "company": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Tech Solutions"
+                                                            },
+                                                            "sector": {
+                                                                "type": "string",
+                                                                "example": "Tecnologia"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 50
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/companies/register": {
+            "post": {
+                "tags": [
+                    "🔐 Autenticação"
+                ],
+                "summary": "Registar nova empresa",
+                "description": "Cria uma nova conta de empresa no sistema",
+                "operationId": "e0144ed4dafded7f962014f0f0fb86d1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Tech Solutions Lda"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@techsolutions.pt"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    },
+                                    "website": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "https://techsolutions.pt"
+                                    },
+                                    "sector": {
+                                        "type": "string",
+                                        "example": "Tecnologia"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Empresa registada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Empresa registada com sucesso! Verifique o seu email para ativar a conta."
+                                        },
+                                        "company": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Tech Solutions Lda"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "admin@techsolutions.pt"
+                                                },
+                                                "website": {
+                                                    "type": "string",
+                                                    "example": "https://techsolutions.pt"
+                                                },
+                                                "sector": {
+                                                    "type": "string",
+                                                    "example": "Tecnologia"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/companies/login": {
+            "post": {
+                "tags": [
+                    "🔐 Autenticação"
+                ],
+                "summary": "Login de empresa",
+                "description": "Autentica uma empresa e retorna o token de acesso",
+                "operationId": "ecc5183b811427a937d379f73981ee4a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@techsolutions.pt"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login realizado com sucesso"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abc123def456..."
+                                        },
+                                        "company": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Tech Solutions Lda"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "admin@techsolutions.pt"
+                                                },
+                                                "website": {
+                                                    "type": "string",
+                                                    "example": "https://techsolutions.pt"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Credenciais inválidas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Email não verificado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email não verificado. Verifique o seu email para ativar a conta."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/candidaturas": {
+            "post": {
+                "tags": [
+                    "📄 Candidaturas"
+                ],
+                "summary": "Submeter candidatura",
+                "description": "Submete uma candidatura para uma oportunidade específica",
+                "operationId": "dca9672d6d430af805d21970526d8a9f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "oportunidade_id",
+                                    "telefone",
+                                    "cv_file",
+                                    "rgpd",
+                                    "recaptcha_token"
+                                ],
+                                "properties": {
+                                    "oportunidade_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "nome": {
+                                        "description": "Obrigatório se não estiver autenticado",
+                                        "type": "string",
+                                        "example": "João Silva"
+                                    },
+                                    "email": {
+                                        "description": "Obrigatório se não estiver autenticado",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@exemplo.com"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "+351912345678"
+                                    },
+                                    "linkedin": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "https://linkedin.com/in/joaosilva"
+                                    },
+                                    "cv_file": {
+                                        "description": "Arquivo CV (PDF, DOC, DOCX - máx 5MB)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "rgpd": {
+                                        "description": "Consentimento RGPD",
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "recaptcha_token": {
+                                        "type": "string",
+                                        "example": "03AGdBq25..."
+                                    },
+                                    "convite_token": {
+                                        "description": "Token de convite (opcional)",
+                                        "type": "string",
+                                        "example": "abc123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Candidatura submetida com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Candidatura submetida com sucesso!"
+                                        },
+                                        "candidatura": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "nome": {
+                                                    "type": "string",
+                                                    "example": "João Silva"
+                                                },
+                                                "slug": {
+                                                    "type": "string",
+                                                    "example": "joao-silva-1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Oportunidade inativa ou já candidatado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Esta oportunidade não está mais ativa"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/analyze-cvs": {
+            "post": {
+                "tags": [
+                    "🤖 Análise de CV"
+                ],
+                "summary": "Analisar múltiplos CVs",
+                "description": "Analisa até 5 CVs em PDF e retorna a pontuação e ranking dos candidatos com base nas competências encontradas",
+                "operationId": "e69553f373846fe9fa9252bc11101c03",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "files": {
+                                        "description": "Array de arquivos PDF (mínimo 2, máximo 5 arquivos, até 5MB cada)",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Análise realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Análise de CVs realizada com sucesso"
+                                        },
+                                        "ranking": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "filename": {
+                                                        "type": "string",
+                                                        "example": "cv_joao.pdf"
+                                                    },
+                                                    "score": {
+                                                        "type": "integer",
+                                                        "example": 85
+                                                    },
+                                                    "ranking": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "skills": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "skill": {
+                                                                    "type": "string",
+                                                                    "example": "Python"
+                                                                },
+                                                                "points": {
+                                                                    "type": "integer",
+                                                                    "example": 25
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "summary": {
+                                                        "type": "string",
+                                                        "example": "Candidato com forte experiência em desenvolvimento..."
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Nenhum arquivo foi enviado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação de arquivo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro de validação"
+                                        },
+                                        "details": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro interno do servidor"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro ao processar análise com IA"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "description": "Token de autenticação Bearer obtido através do login. Formato: Bearer {token}",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "🔐 Autenticação",
+            "description": "Operações de registo e login para empresas e candidatos"
+        },
+        {
+            "name": "💼 Oportunidades",
+            "description": "Gestão completa de oportunidades de emprego (CRUD)"
+        },
+        {
+            "name": "📄 Candidaturas",
+            "description": "Gestão de candidaturas a oportunidades"
+        },
+        {
+            "name": "🤖 Análise de CV",
+            "description": "Análise automatizada de currículos usando inteligência artificial"
+        },
+        {
+            "name": "🌐 Público",
+            "description": "Endpoints públicos sem necessidade de autenticação"
+        }
+    ]
+}

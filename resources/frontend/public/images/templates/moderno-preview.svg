@@ -1,0 +1,51 @@
+<!-- Placeholder for moderno template preview -->
+<svg width="200" height="280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3498db;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#ffffff" stroke="#e0e0e0"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="100%" height="60" fill="url(#headerGrad)"/>
+  <text x="10" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">João Silva</text>
+  <text x="10" y="40" font-family="Arial, sans-serif" font-size="8" fill="white">Desenvolvedor</text>
+  <text x="10" y="52" font-family="Arial, sans-serif" font-size="6" fill="white">joão@email.com • (11) 99999-9999</text>
+  
+  <!-- Content sections -->
+  <rect x="10" y="70" width="50" height="8" fill="#3498db"/>
+  <text x="10" y="86" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="white">RESUMO</text>
+  
+  <rect x="10" y="95" width="180" height="2" fill="#f0f0f0"/>
+  <rect x="10" y="100" width="160" height="2" fill="#f0f0f0"/>
+  <rect x="10" y="105" width="170" height="2" fill="#f0f0f0"/>
+  
+  <rect x="10" y="120" width="60" height="8" fill="#3498db"/>
+  <text x="10" y="136" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="white">EXPERIÊNCIA</text>
+  
+  <text x="10" y="150" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#2c3e50">Desenvolvedor Senior</text>
+  <text x="10" y="160" font-family="Arial, sans-serif" font-size="6" fill="#3498db">TechCorp • 2020-2023</text>
+  
+  <rect x="10" y="170" width="150" height="2" fill="#f0f0f0"/>
+  <rect x="10" y="175" width="140" height="2" fill="#f0f0f0"/>
+  
+  <rect x="10" y="190" width="70" height="8" fill="#3498db"/>
+  <text x="10" y="206" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="white">COMPETÊNCIAS</text>
+  
+  <!-- Skills -->
+  <rect x="10" y="215" width="25" height="10" rx="5" fill="#3498db"/>
+  <text x="12" y="222" font-family="Arial, sans-serif" font-size="4" fill="white">PHP</text>
+  
+  <rect x="40" y="215" width="30" height="10" rx="5" fill="#3498db"/>
+  <text x="42" y="222" font-family="Arial, sans-serif" font-size="4" fill="white">Laravel</text>
+  
+  <rect x="75" y="215" width="25" height="10" rx="5" fill="#3498db"/>
+  <text x="77" y="222" font-family="Arial, sans-serif" font-size="4" fill="white">Vue.js</text>
+  
+  <text x="10" y="250" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#3498db">Template Moderno</text>
+  <text x="10" y="265" font-family="Arial, sans-serif" font-size="6" fill="#7f8c8d">Design clean e contemporâneo</text>
+</svg>

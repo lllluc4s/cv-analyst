@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Mensagens - CV Analyst</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .success {
+            background: #10b981;
+        }
+        .error {
+            background: #ef4444;
+        }
+        pre {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste Sistema de Mensagens - CV Analyst</h1>
+    
+    <div class="card">
+        <h2>🔐 1. Configurar Autenticação</h2>
+        <p>Configure o token da empresa para testar a API:</p>
+        <button onclick="setupAuth()">Configurar Token da Empresa</button>
+        <button onclick="clearAuth()">Limpar Token</button>
+        <div id="auth-status"></div>
+    </div>
+    
+    <div class="card">
+        <h2>📡 2. Testar API</h2>
+        <p>Teste os endpoints da API de mensagens:</p>
+        <button onclick="testConversations()">Testar Conversas</button>
+        <button onclick="testOpportunityApplications()">Testar Candidaturas (Oportunidade 3)</button>
+        <div id="api-status"></div>
+        <pre id="api-response"></pre>
+    </div>
+    
+    <div class="card">
+        <h2>🎯 3. Navegar para Sistema</h2>
+        <p>Acesse as páginas do sistema:</p>
+        <button onclick="goToOpportunities()">Lista de Oportunidades</button>
+        <button onclick="goToMessages()">Mensagens (Oportunidade 3)</button>
+    </div>
+
+    <script>
+        function updateStatus(elementId, message, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${isSuccess ? 'success' : 'error'}">${message}</div>`;
+        }
+        
+        function updateResponse(response) {
+            document.getElementById('api-response').textContent = JSON.stringify(response, null, 2);
+        }
+        
+        function setupAuth() {
+            const token = '28|YmSeIFyIyr2L6waIOOoy4pMFmjP9r1ofSpatcw1u186b8829';
+            localStorage.setItem('company_token', token);
+            updateStatus('auth-status', '✅ Token configurado com sucesso!');
+            console.log('Token configurado:', token);
+        }
+        
+        function clearAuth() {
+            localStorage.removeItem('company_token');
+            updateStatus('auth-status', '🗑️ Token removido');
+        }
+        
+        async function testConversations() {
+            const token = localStorage.getItem('company_token');
+            if (!token) {
+                updateStatus('api-status', '❌ Token não encontrado. Configure primeiro!', false);
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/messages/conversations', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    updateStatus('api-status', '✅ API Conversas funcionando!');
+                    updateResponse(data);
+                } else {
+                    updateStatus('api-status', `❌ Erro ${response.status}: ${data.message || 'Erro desconhecido'}`, false);
+                    updateResponse(data);
+                }
+            } catch (error) {
+                updateStatus('api-status', `❌ Erro de rede: ${error.message}`, false);
+                updateResponse({error: error.message});
+            }
+        }
+        
+        async function testOpportunityApplications() {
+            const token = localStorage.getItem('company_token');
+            if (!token) {
+                updateStatus('api-status', '❌ Token não encontrado. Configure primeiro!', false);
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/oportunidades/3/candidaturas', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    updateStatus('api-status', '✅ API Candidaturas funcionando!');
+                    updateResponse(data);
+                } else {
+                    updateStatus('api-status', `❌ Erro ${response.status}: ${data.message || 'Erro desconhecido'}`, false);
+                    updateResponse(data);
+                }
+            } catch (error) {
+                updateStatus('api-status', `❌ Erro de rede: ${error.message}`, false);
+                updateResponse({error: error.message});
+            }
+        }
+        
+        function goToOpportunities() {
+            window.location.href = '/empresas/oportunidades';
+        }
+        
+        function goToMessages() {
+            window.location.href = '/empresas/oportunidades/3/mensagens';
+        }
+        
+        // Auto-setup na carga da página
+        window.onload = function() {
+            const token = localStorage.getItem('company_token');
+            if (token) {
+                updateStatus('auth-status', '✅ Token já configurado');
+            } else {
+                updateStatus('auth-status', '⚠️ Token não configurado', false);
+            }
+        };
+    </script>
+</body>
+</html>
