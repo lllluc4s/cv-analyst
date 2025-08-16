@@ -14,7 +14,7 @@
     "@types/leaflet": "^1.9.19",
     "axios": "^1.10.0",
     "chart.js": "^4.5.0",
-    "laravel-echo": "^2.1.6",
+    "laravel-echo": "^2.2.0",
     "leaflet": "^1.9.4",
     "mapbox-gl": "^3.13.0",
     "pusher-js": "^8.4.0",
