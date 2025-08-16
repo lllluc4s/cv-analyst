@@ -9,7 +9,7 @@
         "frontend:build": "vite build --config resources/frontend/vite.config.ts"
     },
     "dependencies": {
-        "@types/leaflet": "^1.9.19",
+        "@types/leaflet": "^1.9.20",
         "autoprefixer": "^10.4.21",
         "chart.js": "^4.5.0",
         "leaflet": "^1.9.4",
